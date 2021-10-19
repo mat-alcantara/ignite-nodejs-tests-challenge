@@ -1,4 +1,6 @@
-import { AppError } from "../../../../shared/errors/AppError";
+/* eslint-disable max-classes-per-file */
+/* eslint-disable @typescript-eslint/no-namespace */
+import { AppError } from '../../../../shared/errors/AppError';
 
 export namespace CreateStatementError {
   export class UserNotFound extends AppError {
