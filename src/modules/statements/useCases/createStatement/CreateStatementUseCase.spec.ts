@@ -2,6 +2,7 @@ import { InMemoryUsersRepository } from '../../../users/repositories/in-memory/I
 import { CreateUserUseCase } from '../../../users/useCases/createUser/CreateUserUseCase';
 import { InMemoryStatementsRepository } from '../../repositories/in-memory/InMemoryStatementsRepository';
 import { OperationType } from './CreateStatementController';
+import { CreateStatementError } from './CreateStatementError';
 import { CreateStatementUseCase } from './CreateStatementUseCase';
 
 let createUserUseCase: CreateUserUseCase;
@@ -38,7 +39,31 @@ describe('Create Statement', () => {
     expect(statement).toHaveProperty('id');
   });
 
-  // it('should not create a new statement if user does not exist', async () => {});
+  it('should not create a new statement if user does not exist', async () => {
+    expect(async () => {
+      await createStatementUseCase.execute({
+        amount: 1000,
+        description: 'Salário',
+        type: OperationType.DEPOSIT,
+        user_id: 'wrongId',
+      });
+    }).rejects.toBeInstanceOf(CreateStatementError.UserNotFound);
+  });
 
-  // it('should not create a withdraw if there is insuficient founds', async () => {});
+  it('should not create a withdraw if there is insuficient founds', async () => {
+    const user = await createUserUseCase.execute({
+      name: 'Mateus',
+      email: 'mateus@gmail.com',
+      password: '12345678',
+    });
+
+    expect(async () => {
+      await createStatementUseCase.execute({
+        amount: 1000,
+        description: 'Salário',
+        type: OperationType.WITHDRAW,
+        user_id: user.id || 'wrongId',
+      });
+    }).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds);
+  });
 });
