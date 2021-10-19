@@ -1,10 +1,8 @@
 import { InMemoryUsersRepository } from '../../../users/repositories/in-memory/InMemoryUsersRepository';
-import { CreateUserUseCase } from '../../../users/useCases/createUser/CreateUserUseCase';
 import { InMemoryStatementsRepository } from '../../repositories/in-memory/InMemoryStatementsRepository';
 import { GetBalanceError } from './GetBalanceError';
 import { GetBalanceUseCase } from './GetBalanceUseCase';
 
-let createUserUseCase: CreateUserUseCase;
 let getBalanceUseCase: GetBalanceUseCase;
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -14,7 +12,6 @@ describe('Get Balance', () => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     inMemoryStatementsRepository = new InMemoryStatementsRepository();
 
-    createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
     getBalanceUseCase = new GetBalanceUseCase(
       inMemoryStatementsRepository,
       inMemoryUsersRepository,
@@ -22,7 +19,7 @@ describe('Get Balance', () => {
   });
 
   it('should get user balance', async () => {
-    const user = await createUserUseCase.execute({
+    const user = await inMemoryUsersRepository.create({
       name: 'Mateus',
       email: 'mateus@gmail.com',
       password: '12345678',

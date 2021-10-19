@@ -1,11 +1,9 @@
 import { InMemoryUsersRepository } from '../../../users/repositories/in-memory/InMemoryUsersRepository';
-import { CreateUserUseCase } from '../../../users/useCases/createUser/CreateUserUseCase';
 import { InMemoryStatementsRepository } from '../../repositories/in-memory/InMemoryStatementsRepository';
 import { OperationType } from './CreateStatementController';
 import { CreateStatementError } from './CreateStatementError';
 import { CreateStatementUseCase } from './CreateStatementUseCase';
 
-let createUserUseCase: CreateUserUseCase;
 let createStatementUseCase: CreateStatementUseCase;
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -15,7 +13,6 @@ describe('Create Statement', () => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     inMemoryStatementsRepository = new InMemoryStatementsRepository();
 
-    createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
     createStatementUseCase = new CreateStatementUseCase(
       inMemoryUsersRepository,
       inMemoryStatementsRepository,
@@ -23,7 +20,7 @@ describe('Create Statement', () => {
   });
 
   it('should create a new statement', async () => {
-    const user = await createUserUseCase.execute({
+    const user = await inMemoryUsersRepository.create({
       name: 'Mateus',
       email: 'mateus@gmail.com',
       password: '12345678',
@@ -51,7 +48,7 @@ describe('Create Statement', () => {
   });
 
   it('should not create a withdraw if there is insuficient founds', async () => {
-    const user = await createUserUseCase.execute({
+    const user = await inMemoryUsersRepository.create({
       name: 'Mateus',
       email: 'mateus@gmail.com',
       password: '12345678',

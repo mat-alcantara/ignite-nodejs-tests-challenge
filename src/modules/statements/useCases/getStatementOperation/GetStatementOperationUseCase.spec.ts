@@ -1,10 +1,8 @@
 import { GetStatementOperationUseCase } from './GetStatementOperationUseCase';
 import { InMemoryUsersRepository } from '../../../users/repositories/in-memory/InMemoryUsersRepository';
-import { CreateUserUseCase } from '../../../users/useCases/createUser/CreateUserUseCase';
 import { InMemoryStatementsRepository } from '../../repositories/in-memory/InMemoryStatementsRepository';
 import { OperationType } from '../createStatement/CreateStatementController';
 
-let createUserUseCase: CreateUserUseCase;
 let getStatementOperationUseCase: GetStatementOperationUseCase;
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -14,7 +12,6 @@ describe('Get Statement Operation', () => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     inMemoryStatementsRepository = new InMemoryStatementsRepository();
 
-    createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
     getStatementOperationUseCase = new GetStatementOperationUseCase(
       inMemoryUsersRepository,
       inMemoryStatementsRepository,
@@ -22,7 +19,7 @@ describe('Get Statement Operation', () => {
   });
 
   it('should get user statement operations', async () => {
-    const user = await createUserUseCase.execute({
+    const user = await inMemoryUsersRepository.create({
       name: 'Mateus',
       email: 'mateus@gmail.com',
       password: '12345678',
